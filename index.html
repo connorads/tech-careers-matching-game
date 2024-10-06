@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>TechMatch Challenge</title>
+    <title>TechMatch Challenge - Match the Jobs with the Descriptions</title>
     <!-- Importing canvas-confetti library from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
@@ -13,26 +13,28 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 10px;
             overflow-x: hidden; /* Prevent horizontal scroll caused by confetti */
         }
         h1 {
             color: #333;
             text-align: center;
+            font-size: 1.8em;
+            margin-bottom: 10px;
         }
 
         /* Introductory Message */
         #intro {
-            margin: 10px 0 20px 0;
-            font-size: 1.1em;
+            margin: 5px 0 15px 0;
+            font-size: 1em;
             color: #555;
             text-align: center;
         }
 
         /* Progress/Result Message */
         #message {
-            margin-bottom: 20px;
-            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-size: 1.1em;
             color: #00796b;
             text-align: center;
             min-height: 1.5em; /* Reserve space to prevent layout shift */
@@ -43,19 +45,20 @@
             display: flex;
             justify-content: space-around;
             width: 100%;
-            max-width: 900px;
-            margin-top: 20px;
-            gap: 20px;
+            max-width: 800px;
+            margin-top: 15px;
+            gap: 15px;
             flex-wrap: wrap;
         }
         .column {
             width: 45%;
-            min-width: 300px;
+            min-width: 250px;
         }
         .column h2 {
             text-align: center;
             color: #555;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            font-size: 1.2em;
         }
         .list {
             list-style: none;
@@ -63,22 +66,23 @@
         }
         .list-item {
             background: #fff;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 8px 0;
+            padding: 12px;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             cursor: pointer;
-            transition: background 0.3s, transform 0.3s;
-            min-height: 80px; /* Ensures uniform height */
+            transition: background 0.2s, transform 0.2s;
+            min-height: 70px; /* Ensures uniform height */
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             position: relative; /* For potential future effects */
+            font-size: 0.95em;
         }
         .list-item:hover {
             background: #e0f7fa;
-            transform: translateY(-2px);
+            transform: translateY(-1px);
         }
         .selected {
             background: #b2ebf2;
@@ -86,7 +90,7 @@
         .matched {
             background: #a5d6a7;
             cursor: default;
-            opacity: 0.8;
+            opacity: 0.85;
         }
         .wrong {
             background: #f44336; /* Red background for wrong matches */
@@ -107,27 +111,35 @@
 
         /* Reset Button */
         #reset-btn {
-            margin-top: 30px;
-            padding: 10px 20px;
+            margin-top: 25px;
+            padding: 8px 16px;
             background: #00796b;
             color: #fff;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
             transition: background 0.3s;
-            font-size: 16px;
+            font-size: 14px;
         }
         #reset-btn:hover {
             background: #004d40;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .game-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .column {
+                width: 90%;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Main Title -->
-    <h1>TechMatch Challenge</h1>
-
-    <!-- Introductory Message -->
-    <div id="intro">Match the tech job titles with their correct descriptions by clicking on a title and then a description.</div>
+    <h1>TechMatch Challenge - Match the Jobs with the Descriptions</h1>
 
     <!-- Progress/Result Message -->
     <div id="message"></div>
