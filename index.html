@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>TechMatch Challenge</title>
+    <!-- Importing canvas-confetti library from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
+        /* Basic Styles */
         body {
             font-family: Arial, sans-serif;
             background: #f0f4f7;
@@ -11,11 +14,31 @@
             flex-direction: column;
             align-items: center;
             padding: 20px;
+            overflow-x: hidden; /* Prevent horizontal scroll caused by confetti */
         }
         h1 {
             color: #333;
             text-align: center;
         }
+
+        /* Introductory Message */
+        #intro {
+            margin: 10px 0 20px 0;
+            font-size: 1.1em;
+            color: #555;
+            text-align: center;
+        }
+
+        /* Progress/Result Message */
+        #message {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            color: #00796b;
+            text-align: center;
+            min-height: 1.5em; /* Reserve space to prevent layout shift */
+        }
+
+        /* Game Container */
         .game-container {
             display: flex;
             justify-content: space-around;
@@ -51,6 +74,7 @@
             align-items: center;
             justify-content: center;
             text-align: center;
+            position: relative; /* For potential future effects */
         }
         .list-item:hover {
             background: #e0f7fa;
@@ -64,6 +88,24 @@
             cursor: default;
             opacity: 0.8;
         }
+        .wrong {
+            background: #f44336; /* Red background for wrong matches */
+            color: #fff; /* White text for contrast */
+            animation: wrong-animation 0.5s forwards;
+        }
+
+        @keyframes wrong-animation {
+            0% {
+                background: #f44336;
+                transform: scale(1);
+            }
+            100% {
+                background: #f44336;
+                transform: scale(1);
+            }
+        }
+
+        /* Reset Button */
         #reset-btn {
             margin-top: 30px;
             padding: 10px 20px;
@@ -78,16 +120,19 @@
         #reset-btn:hover {
             background: #004d40;
         }
-        #message {
-            margin-top: 20px;
-            font-size: 1.2em;
-            color: #00796b;
-            text-align: center;
-        }
     </style>
 </head>
 <body>
-    <h1>Match the Tech Job Titles with Their Descriptions</h1>
+    <!-- Main Title -->
+    <h1>TechMatch Challenge</h1>
+
+    <!-- Introductory Message -->
+    <div id="intro">Match the tech job titles with their correct descriptions by clicking on a title and then a description.</div>
+
+    <!-- Progress/Result Message -->
+    <div id="message"></div>
+
+    <!-- Game Container -->
     <div class="game-container">
         <div class="column" id="titles-column">
             <h2>Job Titles</h2>
@@ -99,8 +144,8 @@
         </div>
     </div>
     <button id="reset-btn">Reset Game</button>
-    <div id="message"></div>
 
+    <!-- JavaScript -->
     <script>
         const jobsData = [
             {
@@ -204,22 +249,36 @@
             descriptionsList.innerHTML = '';
 
             // Populate titles
-            titles.forEach((job, index) => {
+            titles.forEach((job) => {
                 const li = document.createElement('li');
                 li.textContent = job["Job Title"];
                 li.classList.add('list-item');
                 li.dataset.title = job["Job Title"];
+                li.setAttribute('tabindex', '0'); // Make focusable
+                li.setAttribute('role', 'button');
+                li.setAttribute('aria-pressed', 'false');
                 li.addEventListener('click', selectTitle);
+                // Add keypress event for Enter key
+                li.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') selectTitle(e);
+                });
                 titlesList.appendChild(li);
             });
 
             // Populate descriptions
-            descriptions.forEach((job, index) => {
+            descriptions.forEach((job) => {
                 const li = document.createElement('li');
                 li.textContent = job["Description"];
                 li.classList.add('list-item');
                 li.dataset.title = job["Job Title"];
+                li.setAttribute('tabindex', '0'); // Make focusable
+                li.setAttribute('role', 'button');
+                li.setAttribute('aria-pressed', 'false');
                 li.addEventListener('click', selectDescription);
+                // Add keypress event for Enter key
+                li.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') selectDescription(e);
+                });
                 descriptionsList.appendChild(li);
             });
         }
@@ -264,6 +323,16 @@
             }
         }
 
+        // Add Confetti Celebration using canvas-confetti library
+        function celebrateConfetti() {
+            // Trigger confetti with canvas-confetti library
+            confetti({
+                particleCount: 200,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
+
         // Check if selected title and description match
         function checkMatch() {
             const titleJobTitle = selectedTitle.dataset.title;
@@ -283,15 +352,25 @@
                 // Check if game is complete
                 if (matchedPairs === selectedJobs.length) {
                     message.textContent = "Congratulations! You've matched all the jobs correctly.";
+                    celebrateConfetti();
                 }
             } else {
                 // Incorrect match
+                // Highlight the wrong selections in red
+                selectedTitle.classList.add('wrong');
+                selectedDescription.classList.add('wrong');
+                message.textContent = "Oops! That's not a match. Try again.";
+
                 setTimeout(() => {
+                    // Remove the wrong highlight
+                    selectedTitle.classList.remove('wrong');
+                    selectedDescription.classList.remove('wrong');
+                    // Also remove the selected class
                     selectedTitle.classList.remove('selected');
                     selectedDescription.classList.remove('selected');
+                    // Reset selections
                     selectedTitle = null;
                     selectedDescription = null;
-                    message.textContent = "Oops! That's not a match. Try again.";
                 }, 1000);
             }
         }
