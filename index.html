@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tech Careers Matching Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f4f7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .game-container {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 900px;
+            margin-top: 20px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .column {
+            width: 45%;
+            min-width: 300px;
+        }
+        .column h2 {
+            text-align: center;
+            color: #555;
+            margin-bottom: 10px;
+        }
+        .list {
+            list-style: none;
+            padding: 0;
+        }
+        .list-item {
+            background: #fff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            min-height: 80px; /* Ensures uniform height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .list-item:hover {
+            background: #e0f7fa;
+            transform: translateY(-2px);
+        }
+        .selected {
+            background: #b2ebf2;
+        }
+        .matched {
+            background: #a5d6a7;
+            cursor: default;
+            opacity: 0.8;
+        }
+        #reset-btn {
+            margin-top: 30px;
+            padding: 10px 20px;
+            background: #00796b;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 16px;
+        }
+        #reset-btn:hover {
+            background: #004d40;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #00796b;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Match the Tech Job Titles with Their Descriptions</h1>
+    <div class="game-container">
+        <div class="column" id="titles-column">
+            <h2>Job Titles</h2>
+            <ul id="titles-list" class="list"></ul>
+        </div>
+        <div class="column" id="descriptions-column">
+            <h2>Job Descriptions</h2>
+            <ul id="descriptions-list" class="list"></ul>
+        </div>
+    </div>
+    <button id="reset-btn">Reset Game</button>
+    <div id="message"></div>
+
+    <script>
+        const jobsData = [
+            {
+                "Job Title":"Software Engineer",
+                "Description":"Designs and builds apps, websites, and software that users interact with daily. They solve coding problems to make everything run smoothly."
+            },
+            {
+                "Job Title":"UX Designer",
+                "Description":"Designs easy-to-use, visually appealing interfaces for websites, apps, or products. Their job is to make sure users have a great experience."
+            },
+            {
+                "Job Title":"Data Scientist",
+                "Description":"Researches and analyses large sets of data to find trends and useful insights. Their work helps companies make data-driven decisions."
+            },
+            {
+                "Job Title":"Cybersecurity Specialist",
+                "Description":"Protects a company's networks and systems from hackers and cyber threats. They make sure sensitive data stays safe."
+            },
+            {
+                "Job Title":"DevOps Engineer",
+                "Description":"Builds and maintains the systems and tools that allow developers to deploy code quickly and reliably. They help automate processes and manage infrastructure."
+            },
+            {
+                "Job Title":"Mobile App Developer",
+                "Description":"Creates apps for smartphones and tablets, focusing on platforms like Android and iOS. They ensure apps work smoothly on different devices."
+            },
+            {
+                "Job Title":"Cloud Architect",
+                "Description":"Designs and manages cloud infrastructure for businesses, making sure their systems are scalable, reliable, and secure."
+            },
+            {
+                "Job Title":"AI/ML Engineer",
+                "Description":"Develops algorithms and models that help machines 'learn' from data. Their work powers things like voice assistants, recommendation systems, and more."
+            },
+            {
+                "Job Title":"Game Developer",
+                "Description":"Designs and builds video games, working on everything from the characters and storylines to the actual coding of gameplay mechanics."
+            },
+            {
+                "Job Title":"IT Support Specialist",
+                "Description":"Helps employees and customers solve technical problems, from setting up computers to troubleshooting software issues. They keep the tech running smoothly."
+            },
+            {
+                "Job Title":"Business Analyst",
+                "Description":"Works with teams to analyse business processes, gather requirements, and suggest improvements. They help companies solve problems and implement new solutions."
+            },
+            {
+                "Job Title":"Product Manager",
+                "Description":"Leads the development of products, from planning features to working with different teams like design and engineering. They ensure the product meets the needs of customers."
+            },
+            {
+                "Job Title":"User Researcher",
+                "Description":"Studies how users interact with products and services to understand their needs and behaviours. Their research helps improve user experience and design."
+            },
+            {
+                "Job Title":"Data Engineer",
+                "Description":"Builds systems that collect, process, and store large amounts of data. They ensure data is organised and accessible for analysis."
+            }
+        ];
+
+        let selectedJobs = [];
+        let titles = [];
+        let descriptions = [];
+        let selectedTitle = null;
+        let selectedDescription = null;
+        let matchedPairs = 0;
+
+        const titlesList = document.getElementById('titles-list');
+        const descriptionsList = document.getElementById('descriptions-list');
+        const message = document.getElementById('message');
+        const resetBtn = document.getElementById('reset-btn');
+
+        // Shuffle function using Fisher-Yates algorithm
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Select 4 unique random jobs
+        function selectRandomJobs() {
+            const shuffled = shuffle([...jobsData]);
+            selectedJobs = shuffled.slice(0, 4);
+        }
+
+        // Initialize the game
+        function initGame() {
+            // Reset variables
+            selectRandomJobs();
+            titles = shuffle([...selectedJobs]);
+            descriptions = shuffle([...selectedJobs]);
+            selectedTitle = null;
+            selectedDescription = null;
+            matchedPairs = 0;
+            message.textContent = '';
+
+            // Clear existing lists
+            titlesList.innerHTML = '';
+            descriptionsList.innerHTML = '';
+
+            // Populate titles
+            titles.forEach((job, index) => {
+                const li = document.createElement('li');
+                li.textContent = job["Job Title"];
+                li.classList.add('list-item');
+                li.dataset.title = job["Job Title"];
+                li.addEventListener('click', selectTitle);
+                titlesList.appendChild(li);
+            });
+
+            // Populate descriptions
+            descriptions.forEach((job, index) => {
+                const li = document.createElement('li');
+                li.textContent = job["Description"];
+                li.classList.add('list-item');
+                li.dataset.title = job["Job Title"];
+                li.addEventListener('click', selectDescription);
+                descriptionsList.appendChild(li);
+            });
+        }
+
+        // Handle title selection
+        function selectTitle(e) {
+            const clicked = e.target;
+            if (clicked.classList.contains('matched') || clicked === selectedTitle) return;
+
+            // Deselect previous selection
+            if (selectedTitle) {
+                selectedTitle.classList.remove('selected');
+            }
+
+            // Select new title
+            selectedTitle = clicked;
+            selectedTitle.classList.add('selected');
+
+            // Attempt to check match if description is already selected
+            if (selectedDescription) {
+                checkMatch();
+            }
+        }
+
+        // Handle description selection
+        function selectDescription(e) {
+            const clicked = e.target;
+            if (clicked.classList.contains('matched') || clicked === selectedDescription) return;
+
+            // Deselect previous selection
+            if (selectedDescription) {
+                selectedDescription.classList.remove('selected');
+            }
+
+            // Select new description
+            selectedDescription = clicked;
+            selectedDescription.classList.add('selected');
+
+            // Attempt to check match if title is already selected
+            if (selectedTitle) {
+                checkMatch();
+            }
+        }
+
+        // Check if selected title and description match
+        function checkMatch() {
+            const titleJobTitle = selectedTitle.dataset.title;
+            const descriptionJobTitle = selectedDescription.dataset.title;
+
+            if (titleJobTitle === descriptionJobTitle) {
+                // Correct match
+                selectedTitle.classList.add('matched');
+                selectedDescription.classList.add('matched');
+                matchedPairs++;
+                message.textContent = `Good job! You have ${matchedPairs} out of 4 matches.`;
+
+                // Reset selections
+                selectedTitle = null;
+                selectedDescription = null;
+
+                // Check if game is complete
+                if (matchedPairs === selectedJobs.length) {
+                    message.textContent = "Congratulations! You've matched all the jobs correctly.";
+                }
+            } else {
+                // Incorrect match
+                setTimeout(() => {
+                    selectedTitle.classList.remove('selected');
+                    selectedDescription.classList.remove('selected');
+                    selectedTitle = null;
+                    selectedDescription = null;
+                    message.textContent = "Oops! That's not a match. Try again.";
+                }, 1000);
+            }
+        }
+
+        // Reset game on button click
+        resetBtn.addEventListener('click', initGame);
+
+        // Start the game on page load
+        window.onload = initGame;
+    </script>
+</body>
+</html>
