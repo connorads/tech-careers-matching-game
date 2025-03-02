@@ -812,7 +812,7 @@
 
                 // Launch multiple confetti bursts
                 const colors = ['#FF4081', '#FF6E40', '#FFEB3B', '#69F0AE', '#40C4FF', '#7C4DFF', '#FF80AB', '#B388FF'];
-                
+
                 (function frame() {
                     confetti({
                         particleCount: 100,
@@ -827,7 +827,7 @@
                         spread: 75,
                         origin: { x: 1, y: 0.8 },
                         colors: colors
-                    });                
+                    });
                     if (Date.now() < end) {
                         requestAnimationFrame(frame);
                     }
@@ -940,7 +940,15 @@
         function updateNavButtons() {
             if (!currentJobFacts) return;
             prevButton.disabled = currentFactIndex === 0;
-            nextButton.disabled = currentFactIndex === currentJobFacts.facts.length - 1;
+            
+            // Update next button to show 'Done' on last fact
+            if (currentFactIndex === currentJobFacts.facts.length - 1) {
+                nextButton.textContent = 'Done';
+                nextButton.disabled = false;
+            } else {
+                nextButton.textContent = 'Next';
+                nextButton.disabled = false;
+            }
         }
 
         prevButton.addEventListener('click', () => {
@@ -951,7 +959,15 @@
         });
 
         nextButton.addEventListener('click', () => {
-            if (!currentJobFacts || currentFactIndex >= currentJobFacts.facts.length - 1) return;
+            if (!currentJobFacts) return;
+            
+            if (currentFactIndex >= currentJobFacts.facts.length - 1) {
+                // If we're on the last fact, close the carousel
+                carousel.classList.remove('show');
+                currentJobFacts = null;
+                return;
+            }
+            
             currentFactIndex++;
             updateFactContent();
             updateNavButtons();
