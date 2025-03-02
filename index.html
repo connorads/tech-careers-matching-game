@@ -109,6 +109,37 @@
             }
         }
 
+        /* Tooltip Styles */
+        .tooltip {
+            position: absolute;
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            max-width: 300px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            font-size: 0.9em;
+            color: #333;
+        }
+
+        .tooltip.show {
+            opacity: 1;
+        }
+
+        .tooltip h3 {
+            margin: 0 0 8px 0;
+            color: #00796b;
+            font-size: 1.1em;
+        }
+
+        .tooltip p {
+            margin: 5px 0;
+            line-height: 1.4;
+        }
+
         /* Reset Button */
         #reset-btn {
             margin-top: 25px;
@@ -217,6 +248,121 @@
                 "Description":"Builds systems that collect, process, and store large amounts of data. They ensure data is organised and accessible for analysis."
             }
         ];
+
+        const londonFunFacts = {
+            "Software Engineer": {
+                title: "Software Engineer in London",
+                facts: [
+                    "London's tech scene is booming with major offices for global giants like Google and Amazon",
+                    "Average salaries range from £50,000–£60,000",
+                    "Strong career progression from junior developer to technical leadership"
+                ]
+            },
+            "UX Designer": {
+                title: "UX Designer in London",
+                facts: [
+                    "Design hotspots in Soho and Shoreditch lead innovative digital products",
+                    "Average salaries range from £53,000–£55,000",
+                    "Career paths often start at boutique agencies before moving to major media/fintech companies"
+                ]
+            },
+            "Data Scientist": {
+                title: "Data Scientist in London",
+                facts: [
+                    "High demand in London's fintech sector",
+                    "Average salaries around £88,000 in startups",
+                    "Common progression from data analyst to lead positions in banks/tech firms"
+                ]
+            },
+            "Cybersecurity Specialist": {
+                title: "Cybersecurity Specialist in London",
+                facts: [
+                    "Critical role in protecting London's banking sector",
+                    "Entry-level roles start around £40,000",
+                    "Many specialists work at UK firms like Darktrace"
+                ]
+            },
+            "DevOps Engineer": {
+                title: "DevOps Engineer in London",
+                facts: [
+                    "Highly sought-after in London's tech scene",
+                    "Often transition from software engineering roles",
+                    "Key to rapid product cycles in London startups"
+                ]
+            },
+            "Mobile App Developer": {
+                title: "Mobile App Developer in London",
+                facts: [
+                    "Dynamic market driven by startups and established brands",
+                    "Work on high-impact fintech and entertainment projects",
+                    "Clear progression path to leading development teams"
+                ]
+            },
+            "Cloud Architect": {
+                title: "Cloud Architect in London",
+                facts: [
+                    "Essential role in London's tech firms",
+                    "Salaries often exceed £70,000",
+                    "Major cloud providers have large London presence"
+                ]
+            },
+            "AI/ML Engineer": {
+                title: "AI/ML Engineer in London",
+                facts: [
+                    "London is an emerging AI innovation hub",
+                    "Salaries range between £68,000-£87,000",
+                    "Strong focus on finance and healthcare sectors"
+                ]
+            },
+            "Game Developer": {
+                title: "Game Developer in London",
+                facts: [
+                    "Lively game development scene with major studios and indies",
+                    "Typical salaries between £30,000-£50,000",
+                    "Regular industry events and conferences"
+                ]
+            },
+            "IT Support Specialist": {
+                title: "IT Support Specialist in London",
+                facts: [
+                    "Crucial role in London's tech infrastructure",
+                    "Entry salaries around £20,000-£30,000",
+                    "Supports both large tech companies and startups"
+                ]
+            },
+            "Business Analyst": {
+                title: "Business Analyst in London",
+                facts: [
+                    "Work across finance and tech sectors",
+                    "Salaries between £40,000-£60,000",
+                    "Bridge technical teams and business stakeholders"
+                ]
+            },
+            "Product Manager": {
+                title: "Product Manager in London",
+                facts: [
+                    "Vital role in London's competitive tech landscape",
+                    "Salaries range from £50,000-£80,000+",
+                    "Common progression from development or business analysis"
+                ]
+            },
+            "User Researcher": {
+                title: "User Researcher in London",
+                facts: [
+                    "High priority role for London companies",
+                    "Salaries range from £35,000-£55,000",
+                    "Key to serving London's diverse population"
+                ]
+            },
+            "Data Engineer": {
+                title: "Data Engineer in London",
+                facts: [
+                    "Critical role in fintech and e-commerce sectors",
+                    "Salaries typically £50,000-£80,000",
+                    "Support data-driven decisions in financial hub"
+                ]
+            }
+        };
 
         let selectedJobs = [];
         let titles = [];
@@ -345,6 +491,56 @@
             });
         }
 
+        // Create and show tooltip
+        function showTooltip(element, jobTitle) {
+            // Remove any existing tooltips
+            const existingTooltip = document.querySelector('.tooltip');
+            if (existingTooltip) {
+                existingTooltip.remove();
+            }
+
+            const facts = londonFunFacts[jobTitle];
+            if (!facts) return;
+
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            tooltip.innerHTML = `
+                <h3>${facts.title}</h3>
+                ${facts.facts.map(fact => `<p>• ${fact}</p>`).join('')}
+            `;
+
+            // Position tooltip next to the matched element
+            document.body.appendChild(tooltip);
+            const rect = element.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+
+            // Calculate position to ensure tooltip stays within viewport
+            let left = rect.right + 10;
+            let top = rect.top;
+
+            // Check if tooltip would go off the right side of the screen
+            if (left + tooltipRect.width > window.innerWidth) {
+                left = rect.left - tooltipRect.width - 10;
+            }
+
+            // Check if tooltip would go off the bottom of the screen
+            if (top + tooltipRect.height > window.innerHeight) {
+                top = window.innerHeight - tooltipRect.height - 10;
+            }
+
+            tooltip.style.left = `${left}px`;
+            tooltip.style.top = `${top}px`;
+
+            // Show tooltip with animation
+            setTimeout(() => tooltip.classList.add('show'), 10);
+
+            // Hide tooltip after 5 seconds
+            setTimeout(() => {
+                tooltip.classList.remove('show');
+                setTimeout(() => tooltip.remove(), 300);
+            }, 5000);
+        }
+
         // Check if selected title and description match
         function checkMatch() {
             const titleJobTitle = selectedTitle.dataset.title;
@@ -356,6 +552,9 @@
                 selectedDescription.classList.add('matched');
                 matchedPairs++;
                 message.textContent = `Good job! You have ${matchedPairs} out of 4 matches.`;
+
+                // Show tooltip next to the title element
+                showTooltip(selectedTitle, titleJobTitle);
 
                 // Reset selections
                 selectedTitle = null;
