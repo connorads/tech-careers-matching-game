@@ -805,63 +805,42 @@
         }
 
         // Add Confetti Celebration using canvas-confetti library
-        function celebrateConfetti() {
-            // Trigger confetti with canvas-confetti library
-            confetti({
-                particleCount: 200,
-                spread: 70,
-                origin: { y: 0.6 }
-            });
-        }
+        function celebrateConfetti(isGameComplete = false) {
+            if (isGameComplete) {
+                // Super celebration for completing all matches
+                const end = Date.now() + 750; // 0.75 seconds
 
-        // Create and show tooltip
-        function showTooltip(element, jobTitle) {
-            // Remove any existing tooltips
-            const existingTooltip = document.querySelector('.tooltip');
-            if (existingTooltip) {
-                existingTooltip.remove();
+                // Launch multiple confetti bursts
+                const colors = ['#FF4081', '#FF6E40', '#FFEB3B', '#69F0AE', '#40C4FF', '#7C4DFF', '#FF80AB', '#B388FF'];
+                
+                (function frame() {
+                    confetti({
+                        particleCount: 100,
+                        angle: 60,
+                        spread: 75,
+                        origin: { x: 0, y: 0.8 },
+                        colors: colors
+                    });
+                    confetti({
+                        particleCount: 100,
+                        angle: 120,
+                        spread: 75,
+                        origin: { x: 1, y: 0.8 },
+                        colors: colors
+                    });                
+                    if (Date.now() < end) {
+                        requestAnimationFrame(frame);
+                    }
+                }());
+            } else {
+                // Single burst for individual matches
+                confetti({
+                    particleCount: 100,
+                    spread: 50,
+                    origin: { y: 0.7 },
+                    colors: ['#00796b', '#004d40', '#26a69a'],
+                });
             }
-
-            const facts = londonFunFacts[jobTitle];
-            if (!facts) return;
-
-            const tooltip = document.createElement('div');
-            tooltip.className = 'tooltip';
-            tooltip.innerHTML = `
-                <h3>${facts.title}</h3>
-                ${facts.facts.map(fact => `<p>• ${fact}</p>`).join('')}
-            `;
-
-            // Position tooltip next to the matched element
-            document.body.appendChild(tooltip);
-            const rect = element.getBoundingClientRect();
-            const tooltipRect = tooltip.getBoundingClientRect();
-
-            // Calculate position to ensure tooltip stays within viewport
-            let left = rect.right + 10;
-            let top = rect.top;
-
-            // Check if tooltip would go off the right side of the screen
-            if (left + tooltipRect.width > window.innerWidth) {
-                left = rect.left - tooltipRect.width - 10;
-            }
-
-            // Check if tooltip would go off the bottom of the screen
-            if (top + tooltipRect.height > window.innerHeight) {
-                top = window.innerHeight - tooltipRect.height - 10;
-            }
-
-            tooltip.style.left = `${left}px`;
-            tooltip.style.top = `${top}px`;
-
-            // Show tooltip with animation
-            setTimeout(() => tooltip.classList.add('show'), 10);
-
-            // Hide tooltip after 5 seconds
-            setTimeout(() => {
-                tooltip.classList.remove('show');
-                setTimeout(() => tooltip.remove(), 300);
-            }, 5000);
         }
 
         // Check if selected title and description match
@@ -876,7 +855,10 @@
                 matchedPairs++;
                 message.textContent = `Good job! You have ${matchedPairs} out of 4 matches.`;
 
-                // Show fact carousel instead of tooltip
+                // Celebrate individual match with confetti
+                celebrateConfetti(false);
+
+                // Show fact carousel
                 showFactCarousel(titleJobTitle);
 
                 // Reset selections
@@ -885,8 +867,9 @@
 
                 // Check if game is complete
                 if (matchedPairs === selectedJobs.length) {
-                    message.textContent = "Congratulations! You've matched all the jobs correctly.";
-                    celebrateConfetti();
+                    message.textContent = "Congratulations! You've matched all the jobs correctly!";
+                    // Super celebration for game completion
+                    celebrateConfetti(true);
                 }
             } else {
                 // Incorrect match
