@@ -1037,14 +1037,6 @@
             currentJobFacts = null; // Clear current facts reference when closing
         });
 
-        // Close carousel when clicking outside
-        window.addEventListener('click', (e) => {
-            if (e.target === carousel) {
-                carousel.classList.remove('show');
-                currentJobFacts = null; // Clear current facts reference when closing
-            }
-        });
-
         // Close carousel with Escape key
         window.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && carousel.classList.contains('show')) {
