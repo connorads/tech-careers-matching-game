@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>TechMatch Challenge - Match the Jobs with the Descriptions</title>
@@ -14,8 +15,10 @@
             flex-direction: column;
             align-items: center;
             padding: 10px;
-            overflow-x: hidden; /* Prevent horizontal scroll caused by confetti */
+            overflow-x: hidden;
+            /* Prevent horizontal scroll caused by confetti */
         }
+
         h1 {
             color: #333;
             text-align: center;
@@ -37,7 +40,8 @@
             font-size: 1.1em;
             color: #00796b;
             text-align: center;
-            min-height: 1.5em; /* Reserve space to prevent layout shift */
+            min-height: 1.5em;
+            /* Reserve space to prevent layout shift */
         }
 
         /* Game Container */
@@ -50,51 +54,63 @@
             gap: 15px;
             flex-wrap: wrap;
         }
+
         .column {
             width: 45%;
             min-width: 250px;
         }
+
         .column h2 {
             text-align: center;
             color: #555;
             margin-bottom: 8px;
             font-size: 1.2em;
         }
+
         .list {
             list-style: none;
             padding: 0;
         }
+
         .list-item {
             background: #fff;
             margin: 8px 0;
             padding: 12px;
             border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             cursor: pointer;
             transition: background 0.2s, transform 0.2s;
-            min-height: 70px; /* Ensures uniform height */
+            min-height: 70px;
+            /* Ensures uniform height */
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            position: relative; /* For potential future effects */
+            position: relative;
+            /* For potential future effects */
             font-size: 0.95em;
         }
+
         .list-item:hover {
             background: #e0f7fa;
             transform: translateY(-1px);
         }
+
         .selected {
             background: #b2ebf2;
         }
+
         .matched {
             background: #a5d6a7;
             cursor: default;
             opacity: 0.85;
         }
+
         .wrong {
-            background: #f44336; /* Red background for wrong matches */
-            color: #fff; /* White text for contrast */
+            background: #f44336;
+            /* Red background for wrong matches */
+            color: #fff;
+            /* White text for contrast */
             animation: wrong-animation 0.5s forwards;
         }
 
@@ -103,6 +119,7 @@
                 background: #f44336;
                 transform: scale(1);
             }
+
             100% {
                 background: #f44336;
                 transform: scale(1);
@@ -115,7 +132,7 @@
             background: #fff;
             padding: 15px;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             max-width: 300px;
             z-index: 1000;
             opacity: 0;
@@ -152,6 +169,7 @@
             transition: background 0.3s;
             font-size: 14px;
         }
+
         #reset-btn:hover {
             background: #004d40;
         }
@@ -162,6 +180,7 @@
                 flex-direction: column;
                 align-items: center;
             }
+
             .column {
                 width: 90%;
             }
@@ -176,7 +195,7 @@
             background: #fff;
             padding: 20px;
             border-radius: 12px;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
             max-width: 600px;
             width: 90%;
             z-index: 1000;
@@ -277,6 +296,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Main Title -->
     <h1>TechMatch Challenge - Match the Jobs with the Descriptions</h1>
@@ -313,60 +333,60 @@
     <script>
         const jobsData = [
             {
-                "Job Title":"Software Engineer",
-                "Description":"Designs and builds apps, websites, and software that users interact with daily. They solve coding problems to make everything run smoothly."
+                "Job Title": "Software Engineer",
+                "Description": "Designs and builds apps, websites, and software that users interact with daily. They solve coding problems to make everything run smoothly."
             },
             {
-                "Job Title":"UX Designer",
-                "Description":"Designs easy-to-use, visually appealing interfaces for websites, apps, or products. Their job is to make sure users have a great experience."
+                "Job Title": "UX Designer",
+                "Description": "Designs easy-to-use, visually appealing interfaces for websites, apps, or products. Their job is to make sure users have a great experience."
             },
             {
-                "Job Title":"Data Scientist",
-                "Description":"Researches and analyses large sets of data to find trends and useful insights. Their work helps companies make data-driven decisions."
+                "Job Title": "Data Scientist",
+                "Description": "Researches and analyses large sets of data to find trends and useful insights. Their work helps companies make data-driven decisions."
             },
             {
-                "Job Title":"Cybersecurity Specialist",
-                "Description":"Protects a company's networks and systems from hackers and cyber threats. They make sure sensitive data stays safe."
+                "Job Title": "Cybersecurity Specialist",
+                "Description": "Protects a company's networks and systems from hackers and cyber threats. They make sure sensitive data stays safe."
             },
             {
-                "Job Title":"DevOps Engineer",
-                "Description":"Builds and maintains the systems and tools that allow developers to deploy code quickly and reliably. They help automate processes and manage infrastructure."
+                "Job Title": "DevOps Engineer",
+                "Description": "Builds and maintains the systems and tools that allow developers to deploy code quickly and reliably. They help automate processes and manage infrastructure."
             },
             {
-                "Job Title":"Mobile App Developer",
-                "Description":"Creates apps for smartphones and tablets, focusing on platforms like Android and iOS. They ensure apps work smoothly on different devices."
+                "Job Title": "Mobile App Developer",
+                "Description": "Creates apps for smartphones and tablets, focusing on platforms like Android and iOS. They ensure apps work smoothly on different devices."
             },
             {
-                "Job Title":"Cloud Architect",
-                "Description":"Designs and manages cloud infrastructure for businesses, making sure their systems are scalable, reliable, and secure."
+                "Job Title": "Cloud Architect",
+                "Description": "Designs and manages cloud infrastructure for businesses, making sure their systems are scalable, reliable, and secure."
             },
             {
-                "Job Title":"AI/ML Engineer",
-                "Description":"Develops algorithms and models that help machines 'learn' from data. Their work powers things like voice assistants, recommendation systems, and more."
+                "Job Title": "AI/ML Engineer",
+                "Description": "Develops algorithms and models that help machines 'learn' from data. Their work powers things like voice assistants, recommendation systems, and more."
             },
             {
-                "Job Title":"Game Developer",
-                "Description":"Designs and builds video games, working on everything from the characters and storylines to the actual coding of gameplay mechanics."
+                "Job Title": "Game Developer",
+                "Description": "Designs and builds video games, working on everything from the characters and storylines to the actual coding of gameplay mechanics."
             },
             {
-                "Job Title":"IT Support Specialist",
-                "Description":"Helps employees and customers solve technical problems, from setting up computers to troubleshooting software issues. They keep the tech running smoothly."
+                "Job Title": "IT Support Specialist",
+                "Description": "Helps employees and customers solve technical problems, from setting up computers to troubleshooting software issues. They keep the tech running smoothly."
             },
             {
-                "Job Title":"Business Analyst",
-                "Description":"Works with teams to analyse business processes, gather requirements, and suggest improvements. They help companies solve problems and implement new solutions."
+                "Job Title": "Business Analyst",
+                "Description": "Works with teams to analyse business processes, gather requirements, and suggest improvements. They help companies solve problems and implement new solutions."
             },
             {
-                "Job Title":"Product Manager",
-                "Description":"Leads the development of products, from planning features to working with different teams like design and engineering. They ensure the product meets the needs of customers."
+                "Job Title": "Product Manager",
+                "Description": "Leads the development of products, from planning features to working with different teams like design and engineering. They ensure the product meets the needs of customers."
             },
             {
-                "Job Title":"User Researcher",
-                "Description":"Studies how users interact with products and services to understand their needs and behaviours. Their research helps improve user experience and design."
+                "Job Title": "User Researcher",
+                "Description": "Studies how users interact with products and services to understand their needs and behaviours. Their research helps improve user experience and design."
             },
             {
-                "Job Title":"Data Engineer",
-                "Description":"Builds systems that collect, process, and store large amounts of data. They ensure data is organised and accessible for analysis."
+                "Job Title": "Data Engineer",
+                "Description": "Builds systems that collect, process, and store large amounts of data. They ensure data is organised and accessible for analysis."
             }
         ];
 
@@ -720,7 +740,7 @@
                 li.setAttribute('aria-pressed', 'false');
                 li.addEventListener('click', selectTitle);
                 // Add keypress event for Enter key
-                li.addEventListener('keypress', function(e) {
+                li.addEventListener('keypress', function (e) {
                     if (e.key === 'Enter') selectTitle(e);
                 });
                 titlesList.appendChild(li);
@@ -737,7 +757,7 @@
                 li.setAttribute('aria-pressed', 'false');
                 li.addEventListener('click', selectDescription);
                 // Add keypress event for Enter key
-                li.addEventListener('keypress', function(e) {
+                li.addEventListener('keypress', function (e) {
                     if (e.key === 'Enter') selectDescription(e);
                 });
                 descriptionsList.appendChild(li);
@@ -906,15 +926,15 @@
             currentJobFacts = facts; // Store reference to current job facts
             currentFactIndex = 0;
             carousel.querySelector('h2').textContent = facts.title;
-            
+
             // Create indicators
-            indicators.innerHTML = facts.facts.map((_, index) => 
+            indicators.innerHTML = facts.facts.map((_, index) =>
                 `<div class="fact-indicator${index === 0 ? ' active' : ''}"></div>`
             ).join('');
 
             updateFactContent();
             carousel.classList.add('show');
-            
+
             // Update button states
             updateNavButtons();
         }
@@ -982,4 +1002,5 @@
         window.onload = initGame;
     </script>
 </body>
+
 </html>
